@@ -40,6 +40,7 @@ twitter.get('/users/:user/messages', (req, res) => {
 
 twitter.post('/users', (req, res) => {
     const {picture, name, email, password} = req.body
+    if (!name || !email || !password) return res.json('name, email and password is required')
     client.query(`INSERT INTO users (picture, name, email, password) VALUES('${picture}', '${name}', '${email}', '${password}') RETURNING *`)
     .then(data => res.json(data.rows))
 })
@@ -57,6 +58,7 @@ twitter.get('/messages/:id', (req, res) => {
 
 twitter.post('/messages', (req, res) => {
     const {text, users_id} = req.body
+    if (!text || !users_id) return res.json('text and users_id is required')
     client.query(`INSERT INTO messages (text, users_id) VALUES('${text}', '${users_id}') RETURNING *`)
     .then(data => res.json(data.rows))
 })
