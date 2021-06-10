@@ -49,7 +49,7 @@ twitter.get('/users/:user/messages', (req, res) => {
 twitter.post('/users', (req, res) => {
     const {picture, name, email, password} = req.body
     if (!name || !email || !password) return res.json('name, email and password is required')
-    const query = "INSERT INTO users (picture, name, email, password) VALUES('$1', '$2', '$3', '$4') RETURNING *"
+    const query = "INSERT INTO users (picture, name, email, password) VALUES($1, $2, $3, $4) RETURNING *"
     const values = [picture, name, email, password]
     client.query(query, values)
     .then(data => res.json(data.rows))
@@ -71,7 +71,7 @@ twitter.get('/messages/:id', (req, res) => {
 twitter.post('/messages', (req, res) => {
     const {text, users_id} = req.body
     if (!text || !users_id) return res.json('text and users_id is required')
-    const query = "INSERT INTO messages (text, users_id) VALUES('$1', '$2') RETURNING *"
+    const query = "INSERT INTO messages (text, users_id) VALUES($1, $2) RETURNING *"
     const values = [text, users_id]
     client.query(query, values)
     .then(data => res.json(data.rows))
