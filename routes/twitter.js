@@ -20,6 +20,18 @@ twitter.get('/users/:id', (req, res) => {
     .then(data => res.json(data.rows))
 })
 
+twitter.delete('/users/:id', (req, res) => {
+    let {id} = req.params
+    client.query(`DELETE FROM users WHERE id=${id}`)
+    .then(data => res.json(data.rows))
+})
+
+twitter.delete('/messages/:id', (req, res) => {
+    let {id} = req.params
+    client.query(`DELETE FROM messages WHERE id=${id}`)
+    .then(data => res.json(data.rows))
+})
+
 twitter.get('/users/:user/messages', (req, res) => {
     let {user} = req.params
     client.query(`SELECT text, time, picture, name, email, users.id FROM messages RIGHT JOIN users ON users.id=users_id WHERE users_id=${user} ORDER BY time ASC`)
