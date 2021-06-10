@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "text":"Hi ! This is a sample Tweet. I dont know what I am doing, help AAAAHHH",
+        "time": "1519211809934",
+        "users_id": 2
+    },
+    {
+        "id": 2,
+        "text":"Hi ! More sample Tweets? WOW incredible!",
+        "time": "1519129864400",
+        "users_id": 2
+    },
+    {
+        "id": 3,
+        "text":"Wow, this Data is amazing, so interesting to see all the different Tweets!",
+        "time": "1519159864400",
+        "users_id": 1
+    }
+]
