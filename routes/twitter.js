@@ -2,18 +2,10 @@ const twitter = require('express').Router()
 const express = require('express')
 twitter.use(express.urlencoded({ extended: false }))
 const client = require('../client.js')
+const path = require('path');
 
 twitter.get('/', (req, res) => {
-    res.json(`Documentation:
-    get /users --> gets all the users
-    get /users/{id} --> gets only the user with that ID
-    get /users/{id}/messages --> gets all the messages and user info from that specific user, ordered by time
-    post /users --> adds a user -> needs a picture(url), name, email and password
-    get /messages --> gets all the messages, ordered by time
-    get /messages/{id} --> only gets the message with that ID
-    post /messages --> adds a message -> needs text, users_id (time is optional, default is current time)
-    get /me --> gets a random user
-    `)
+    res.sendFile(path.join(__dirname, '../documentation.html'))
 })
 
 

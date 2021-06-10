@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample Site</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    body { padding-top: 50px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="jumbotron">
+      <h1>Documentation of our mini-twitter API</h1>
+      <p>
+        Documentation: <br/>
+        <i>get</i> <b>/users</b> --> gets all the users<br/>
+        <i>get</i> <b>/users/{id}</b> --> gets only the user with that ID<br/>
+        <i>get</i> <b>/users/{id}/messages</b> --> gets all the messages and user info from that specific user, ordered by time<br/>
+        <i>post</i> <b>/users</b> --> adds a user -> needs a picture(url), name, email and password<br/>
+        <i>get</i> <b>/messages</b> --> gets all the messages, ordered by time<br/>
+        <i>get</i> <b>/messages/{id}</b> --> only gets the message with that ID<br/>
+        <i>post</i> <b>/messages</b> --> adds a message -> needs text, users_id (time is optional, default is current time)<br/>
+        <i>get</i> <b>/me</b> --> gets a random user
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>
