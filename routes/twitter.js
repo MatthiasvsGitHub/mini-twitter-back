@@ -22,6 +22,18 @@ twitter.get('/users/:id', (req, res) => {
     .then(data => res.json(data.rows))
 })
 
+twitter.put('/users/:id', async (req, res) => {
+    if (!req.body.picture || !req.body.name || !req.body.email) return res.json('name, email and picture is required')
+    const query = "UPDATE users SET picture=$2, name=$3, email=$4 WHERE id=$1 RETURNING *"
+    const values = [req.params.id, req.body.picture, req.body.name, req.body.email]
+    const emailParam = [req.body.email]
+    await client.query("SELECT email FROM users WHERE email=$1", emailParam).then(data => {
+        if(data.rows.length>0) return res.json('Email already exists')
+        else client.query(query, values)
+        .then(data => res.json(data.rows))
+    })
+})
+
 twitter.delete('/users/:id', (req, res) => {
     const {id} = req.params
     const query = "DELETE FROM users WHERE id=$1"
@@ -46,13 +58,17 @@ twitter.get('/users/:user/messages', (req, res) => {
     .then(data => res.json(data.rows))
 })
 
-twitter.post('/users', (req, res) => {
+twitter.post('/users', async (req, res) => {
     const {picture, name, email, password} = req.body
     if (!name || !email || !password) return res.json('name, email and password is required')
     const query = "INSERT INTO users (picture, name, email, password) VALUES($1, $2, $3, $4) RETURNING *"
     const values = [picture, name, email, password]
-    client.query(query, values)
-    .then(data => res.json(data.rows))
+    const emailParam = [email]
+    await client.query("SELECT email FROM users WHERE email=$1", emailParam).then(data => {
+        if(data.rows.length>0) return res.json('Email already exists')
+        else client.query(query,values)
+        .then(data => res.json(data.rows))
+    })
 })
 
 twitter.get('/messages', (req, res) => {
