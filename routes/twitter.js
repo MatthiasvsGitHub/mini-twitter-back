@@ -10,38 +10,48 @@ twitter.get('/', (req, res) => {
 
 
 twitter.get('/users', (req, res) => {
-    client.query(`SELECT id, picture, name, email FROM users`)
+    client.query('SELECT id, picture, name, email FROM users')
     .then(data => res.json(data.rows))
 })
 
+
 twitter.get('/users/:id', (req, res) => {
-    let {id} = req.params
-    client.query(`SELECT id, picture, name, email FROM users WHERE id=${id}`)
+    const query = "SELECT id, picture, name, email FROM users WHERE id=$1"
+    const values = [req.params.id]
+    client.query(query, values)
     .then(data => res.json(data.rows))
 })
 
 twitter.delete('/users/:id', (req, res) => {
-    let {id} = req.params
-    client.query(`DELETE FROM users WHERE id=${id}`)
+    const {id} = req.params
+    const query = "DELETE FROM users WHERE id=$1"
+    const values = [id]
+    client.query(query, values)
     .then(data => res.json(data.rows))
 })
 
 twitter.delete('/messages/:id', (req, res) => {
-    let {id} = req.params
-    client.query(`DELETE FROM messages WHERE id=${id}`)
+    const {id} = req.params
+    const query = "DELETE FROM messages WHERE id=$1"
+    const values = [id]
+    client.query(query,values)
     .then(data => res.json(data.rows))
 })
 
 twitter.get('/users/:user/messages', (req, res) => {
-    let {user} = req.params
-    client.query(`SELECT text, time, picture, name, email, users.id FROM messages RIGHT JOIN users ON users.id=users_id WHERE users_id=${user} ORDER BY time ASC`)
+    const {user} = req.params
+    const query = "SELECT text, time, picture, name, email, users.id FROM messages RIGHT JOIN users ON users.id=users_id WHERE users_id=$1 ORDER BY time ASC"
+    const values = [user]
+    client.query(query, values)
     .then(data => res.json(data.rows))
 })
 
 twitter.post('/users', (req, res) => {
     const {picture, name, email, password} = req.body
     if (!name || !email || !password) return res.json('name, email and password is required')
-    client.query(`INSERT INTO users (picture, name, email, password) VALUES('${picture}', '${name}', '${email}', '${password}') RETURNING *`)
+    const query = "INSERT INTO users (picture, name, email, password) VALUES('$1', '$2', '$3', '$4') RETURNING *"
+    const values = [picture, name, email, password]
+    client.query(query, values)
     .then(data => res.json(data.rows))
 })
 
@@ -52,14 +62,18 @@ twitter.get('/messages', (req, res) => {
 
 twitter.get('/messages/:id', (req, res) => {
     let {id} = req.params
-    client.query(`SELECT * FROM messages WHERE id=${id}`)
+    const query = "SELECT * FROM messages WHERE id=$1"
+    const values = [id]
+    client.query(query, values)
     .then(data => res.json(data.rows))
 })
 
 twitter.post('/messages', (req, res) => {
     const {text, users_id} = req.body
     if (!text || !users_id) return res.json('text and users_id is required')
-    client.query(`INSERT INTO messages (text, users_id) VALUES('${text}', '${users_id}') RETURNING *`)
+    const query = "INSERT INTO messages (text, users_id) VALUES('$1', '$2') RETURNING *"
+    const values = [text, users_id]
+    client.query(query, values)
     .then(data => res.json(data.rows))
 })
 
