@@ -83,7 +83,9 @@ twitter.post('/users', async (req, res) => {
     const { picture, name, email, password } = req.body
     if (!name || !email || !password) return res.json('name, email and password is required')
     const query = "INSERT INTO users (picture, name, email, password) VALUES($1, $2, $3, $4) RETURNING *"
-    const values = [picture, name, email, password]
+    const salt = await bcrypt.genSalt(10)
+    const hashPassword = await bcrypt.hash(password, salt)
+    const values = [picture, name, email, hashPassword]
     const emailParam = [email]
     await client.query("SELECT email FROM users WHERE email=$1", emailParam).then(data => {
         if (data.rows.length > 0) return res.json('Email already exists')
