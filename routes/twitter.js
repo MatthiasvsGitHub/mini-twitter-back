@@ -113,7 +113,7 @@ twitter.delete('/messages/:id', (req, res) => {
 
 twitter.get('/users/:user/messages', (req, res) => {
     const { user } = req.params
-    const query = "SELECT text, time, picture, name, email, users.id FROM messages RIGHT JOIN users ON users.id=users_id WHERE users_id=$1 ORDER BY time ASC"
+    const query = "SELECT text, time, picture, name, email, users.id FROM messages RIGHT JOIN users ON users.id=users_id WHERE users_id=$1 ORDER BY time DESC"
     const values = [user]
     client.query(query, values)
         .then(data => res.json(data.rows))
@@ -121,7 +121,7 @@ twitter.get('/users/:user/messages', (req, res) => {
 
 
 twitter.get('/messages', (req, res) => {
-    client.query(`SELECT * FROM messages ORDER BY time ASC`)
+    client.query(`SELECT * FROM messages ORDER BY time DESC`)
         .then(data => res.json(data.rows))
 })
 
