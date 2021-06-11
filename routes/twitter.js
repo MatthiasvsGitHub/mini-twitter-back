@@ -77,18 +77,27 @@ twitter.get('/messages', (req, res) => {
 })
 
 twitter.get('/messages/:id', (req, res) => {
-    let {id} = req.params
+    const {id} = req.params
     const query = "SELECT * FROM messages WHERE id=$1"
     const values = [id]
     client.query(query, values)
     .then(data => res.json(data.rows))
 })
 
+twitter.put('/messages/:id', (req, res) => {
+    const {id} = req.params
+    const {tags, likes} = req.body
+    const query = "UPDATE messages SET tags=$2, likes=$3 WHERE id=$1 RETURNING *"
+    const values = [id, tags, likes]
+    client.query(query, values)
+    .then(data => res.json(data.rows))
+})
+
 twitter.post('/messages', (req, res) => {
-    const {text, users_id} = req.body
-    if (!text || !users_id) return res.json('text and users_id is required')
-    const query = "INSERT INTO messages (text, users_id) VALUES($1, $2) RETURNING *"
-    const values = [text, users_id]
+    const {text, users_id, tags, likes} = req.body
+    if (!text || !users_id || !tags) return res.json('text, users_id and likes is required')
+    const query = "INSERT INTO messages (text, users_id, tags, likes) VALUES($1, $2, $3, $4) RETURNING *"
+    const values = [text, users_id, tags, likes]
     client.query(query, values)
     .then(data => res.json(data.rows))
 })
