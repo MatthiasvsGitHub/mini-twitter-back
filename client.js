@@ -1,7 +1,6 @@
 require('dotenv').config()
 const { Pool } = require('pg');
 
-
 const client = new Pool({
  user: process.env.USER,
  host: process.env.HOST,
